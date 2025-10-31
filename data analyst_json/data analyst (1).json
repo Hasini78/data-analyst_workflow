@@ -1,0 +1,262 @@
+{
+  "name": "data analyst",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Hi there! 👋\nI am a data analyst assistant how can I help u?",
+        "options": {
+          "inputPlaceholder": "Type your question..",
+          "title": "Your first insight",
+          "responseMode": "lastNode"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "fa19ffec-2059-482d-b103-713095cc7c0e",
+      "name": "When chat message received",
+      "webhookId": "b0ce7bae-d281-4ba4-9b3c-bcf30b23c74a"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{$json[\"prompt\"]}}\n",
+        "options": {
+          "systemMessage": "You are an n8n Data Analyst AI Agent, a friendly and approachable expert on the n8n platform. You help users load, inspect, and manipulate spreadsheet or CSV data by calling your available tools, such as the Get Data tool.\n\nAlways provide clear, step-by-step instructions, anticipate common issues, and suggest best practices when working with data in n8n.\n\nUse a helpful, encouraging tone, and explain technical steps in a way that both beginners and intermediate users can follow.\n\nFocus on helping users understand how their data flows through n8n, how to inspect rows and columns, and how to transform, filter, or analyze spreadsheet data efficiently."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        0
+      ],
+      "id": "a46f0481-16a4-41ec-9b9a-aad85fc59136",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        640,
+        176
+      ],
+      "id": "5c37aa72-e84e-4de7-8f9b-cb10d9a6385f",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "RML2cd0VK3iQHYrh",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 15
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        784,
+        176
+      ],
+      "id": "39d36de6-e21f-4415-8fd9-21bfe4be7f54",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "select *from cricket_batsmen;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mySql",
+      "typeVersion": 2.5,
+      "position": [
+        208,
+        0
+      ],
+      "id": "af6970c7-e6c1-49eb-b13c-654d3fd8079f",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "mySql": {
+          "id": "BeitVCUr1wQHig4G",
+          "name": "MySQL account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Get all rows from the SQL query result\nconst rows = $input.all().map(item => item.json);\n\n// Build a readable summary string for Gemini\nlet dataSummary = \"Here is ODI batsmen data:\\n\\n\";\n\nfor (let i = 0; i < rows.length; i++) {\n  const r = rows[i];\n  dataSummary += `${r.Batsmen} scored ${r.Run_Score} runs with a strike rate of ${r.Strike_Rate} for ${r.Team} vs ${r.Opposition} at ${r.Venue}.\\n`;\n}\n\n// Create a clear prompt for Gemini\nconst prompt = dataSummary + `\nNow analyze this dataset and return:\n1. The top 3 batsmen with the highest strike rates.\n2. Their strike rates (numerical values).\n3. A short comparison (who was most aggressive, consistent, etc.).\nGive the answer as plain text only, no extra commentary.\n`;\n\n// Return prompt so Gemini can use it\nreturn [\n  {\n    json: {\n      prompt: prompt\n    }\n  }\n];\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "7c66b49a-655f-48e7-acf2-6cc8ee47c2af",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "operation": "toText",
+        "sourceProperty": "={{$json[\"text\"]}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        0
+      ],
+      "id": "395d3253-b167-436c-b18b-68155bbba07f",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "/home/node/files/ai_output.txt",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        1280,
+        0
+      ],
+      "id": "17b0d6f4-3d32-4ec2-8167-e4893c1230c8",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "chatId": "6356198890",
+        "text": "=The AI output file has been created at C:/n8n_files/ai_output.txt",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1504,
+        0
+      ],
+      "id": "0891fcd9-50db-4921-8a19-b505e00f9626",
+      "name": "Send a text message",
+      "webhookId": "48d79e47-3f49-4e6e-9011-85c79f1337a4",
+      "credentials": {
+        "telegramApi": {
+          "id": "yoyrCE3w1nydmuVa",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Execute a SQL query": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "9f0e2f71-6d07-4b24-bf8a-8350361c1e10",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "3e577e1628ed339243e6c1bbcb07ed1f8a4d778e3ea322a752d2e79a1baa4bc1"
+  },
+  "id": "BUwC6oGcM9BrHUzh",
+  "tags": []
+}
