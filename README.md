@@ -4,76 +4,114 @@ Automated Insights with n8n, Google Gemini, MySQL & Telegram
 ________________________________________
 🌟 Overview
 This project brings data analytics to life by creating an AI Data Analyst Assistant that can chat, analyze, and respond intelligently to cricket statistics queries.
-Using n8n automation, Google Gemini AI, and a MySQL database, the system interacts with users, retrieves data, performs insightful analysis, and finally notifies them through Telegram — all automatically.
+Using n8n automation, Google Gemini AI, and a MySQL database, the system:
+•	💬 Interacts with users via chat
+•	🗄️ Retrieves and analyzes real-time data
+•	🧠 Generates insightful reports
+•	📲 Notifies users instantly via Telegram
+—all automatically.
 ________________________________________
 🧩 Workflow Highlights
-The entire process is designed as a seamless chain of intelligent automation:
-•	💬 Chat Trigger: The conversation begins when a user sends a message to the chatbot. It provides a friendly interface that feels like chatting with a real analyst.
-•	🗄️ SQL Query Execution: The workflow connects to the MySQL database and fetches real cricket batsmen statistics in real time.
-•	🧠 AI Data Analysis: The data is processed through Google Gemini, which identifies key performance patterns such as top scorers and highest strike rates.
-•	🧾 File Creation: Once the analysis is complete, the insights are neatly converted into a text report.
-•	💾 File Storage: The generated report is stored safely in the n8n server directory for easy access.
-•	📲 Telegram Notification: Finally, a message is sent through Telegram to notify the user that the analysis file is ready.
-Each step works together in harmony to transform raw data into easy-to-understand AI insights.
+Step	Process	Description
+💬 1	Chat Trigger	The interaction begins when the user sends a message to the chatbot — like chatting with a real data analyst.
+🗄️ 2	SQL Query Execution	Connects to the MySQL database to fetch cricket batsmen statistics in real time.
+🧠 3	AI Data Analysis	The Google Gemini model analyzes data patterns like top scorers and highest strike rates.
+🧾 4	File Creation	Converts insights into a well-structured text report automatically.
+💾 5	File Storage	Saves the generated report on the n8n server directory.
+📲 6	Telegram Notification	Sends an instant Telegram message to notify users that the report is ready.
 ________________________________________
+🧭 Workflow Diagrams
+🔹 Normal Workflow
+ ![Normal Workflow](./Assets/workflow.png)
+🔹 n8n Workflow Implementation
+This shows the actual automation sequence inside n8n.
+🧩 n8n Workflow Snapshot:
+Here’s the visual overview of my automated workflow built using n8n 👇  
+![n8n Workflow](./Assets/n8n_workflow.png)
+💡 Description:
+This snapshot represents the automation process built in n8n, where each node handles a specific task such as triggering chat input, fetching data from MySQL, sending it to Google Gemini for AI analysis, saving the output file, and notifying the user via Telegram.
 🔄 How It Works
-1.	Start the Chat
-The user greets the assistant through a public chat link and asks a question, like “Who are the top three batsmen by strike rate?”
-2.	Database Connection
-The system instantly connects to the MySQL database and retrieves all relevant cricket data.
-3.	AI-Powered Analysis
-Google Gemini examines the retrieved data, compares player performance, and crafts meaningful insights in natural language.
-4.	Report Generation
-The output is converted into a well-formatted text report and saved on the server.
-5.	Instant Notification
-The user receives a Telegram message confirming the file creation and its location on the system.
+1.	Start the Chat:
+User greets the assistant and asks questions (e.g., “Who are the top three batsmen by strike rate?”).
+2.	Database Connection:
+The system connects to the MySQL database and retrieves cricket data.
+3.	AI-Powered Analysis:
+Google Gemini AI analyzes player performance and generates insights.
+4.	Report Generation:
+Results are formatted and saved as a .txt file.
+5.	Instant Notification:
+A Telegram message confirms report creation and provides the file location.
 ________________________________________
 🧠 Core Features
-✨ AI-Driven Insights — Uses Google Gemini to analyze cricket data intelligently.
-💬 Conversational Interface — Simple chat-based interaction makes analytics accessible to everyone.
-🧠 Smart Memory — Remembers the last 15 messages for context-aware conversations.
-🗃️ Real-Time Database Access — Fetches the latest statistics directly from MySQL.
-📁 Automated Report Generation — Saves AI-generated insights as text files.
-📱 Telegram Notifications — Instantly alerts users when the analysis is complete.
+•	✨ AI-Driven Insights: Real-time intelligent analysis using Google Gemini
+•	💬 Conversational Interface: Natural, chat-based interaction
+•	🧠 Smart Memory: Retains last 15 messages for context-aware responses
+•	🗃️ Real-Time Database Access: Live MySQL queries
+•	📁 Automated Report Generation: Neatly formatted AI reports
+•	📱 Telegram Notifications: Instant alerts for completed analyses
 ________________________________________
 🧰 Technologies Used
-•	n8n Automation Platform
-•	Google Gemini AI (Large Language Model)
-•	MySQL Database
-•	Telegram Bot API
+🧩 Tools
+•	n8n – Workflow automation engine
+•	Google Gemini AI – Intelligent data analysis and language understanding
+•	Telegram Bot API – User interaction and notifications
+•	JavaScript – Data formatting and logic scripting
+🗄️ Resources
+•	MySQL Database – Source of cricket batsmen statistics
+•	File System (n8n storage) – For saving generated reports
 ________________________________________
-🖥️ System Requirements
-•	A running n8n instance (Cloud or Self-hosted)
-•	Access to a MySQL database containing cricket batsmen statistics
-•	A valid Google Gemini API key (Google AI Studio)
-•	A Telegram Bot token and chat ID for notifications
+⚙️ Setup Instructions
+1️⃣ Prerequisites
+•	Node.js and npm installed
+•	MySQL database with cricket data
+•	n8n (desktop or self-hosted) installed
+•	Google Gemini API key (from Google AI Studio)
+•	Telegram Bot Token & Chat ID
 ________________________________________
-🧾 Output Example
-After completing the analysis, the system generates a readable summary highlighting:
-•	Top three batsmen with the highest strike rates
-•	Their numerical performance metrics
-•	A short comparison on aggression and consistency
-The report is automatically saved to:
+2️⃣ Configure n8n Workflow
+Step	Node	Description
+1	Telegram Trigger	Triggers the workflow when a chat message is received.
+2	MySQL Node	Connects to the cricket database (configure host, user, password, DB).
+3	JavaScript Node	Formats or summarizes SQL query results.
+4	AI Agent Node (Gemini)	Processes and interprets data using the Gemini model.
+5	Convert to File Node	Converts AI output into a .txt report.
+6	Write to Disk Node	Saves report in /home/node/files/ai_output.txt.
+7	Telegram Message Node	Sends notification to user once the report is ready.
+________________________________________
+🧾 Sample Output
+Report Example:
+Top 3 Batsmen by Strike Rate:
+1. Virat Kohli – 134.6
+2. Rohit Sharma – 128.3
+3. KL Rahul – 126.9
+
+Insight: Kohli leads with both aggression and consistency, followed closely by Rohit and Rahul.
+📁 File Location:
 /home/node/files/ai_output.txt
-The user then receives a Telegram message confirming that the file is ready.
+ ![Output File](./Assets/output.png)
+📲 Telegram Notification:
+“✅ Your cricket analysis report is ready! Check the saved file in /home/node/files.”
+ ![Telegram Notification](./Assets/telegram_output.png)a
 ________________________________________
 🌱 Future Enhancements
-🚀 Add support for multiple database tables
-📊 Integrate data visualization with charts and graphs
-📅 Enable scheduled report generation
-🔐 Implement user authentication
-📄 Add export options for PDF and Excel
-💬 Introduce natural language to SQL conversion
+•	🚀 Multi-table database analysis
+•	📊 Chart-based visual analytics
+•	📅 Scheduled report generation
+•	🔐 User authentication system
+•	📄 Export to PDF/Excel
+•	💬 Natural Language → SQL query translation
 ________________________________________
 💡 Why This Project
-This workflow shows how AI and automation can simplify complex data analysis. By connecting Gemini’s intelligence with n8n’s automation power, users can instantly query and understand cricket data — without writing a single line of code.
-It’s a step toward humanized analytics — where data answers back in plain language.
+This project demonstrates how AI + Automation can simplify complex data analytics.
+By combining Google Gemini’s intelligence with n8n’s automation, users can query and interpret cricket data instantly and conversationally — no code needed.
+It’s a step toward humanized analytics, where data answers back.
 ________________________________________
 🏁 Conclusion
-The AI-Powered Data Analyst Workflow is a complete blend of technology and intelligence.
-It makes analytics conversational, reports automatic, and insights effortless — all through the power of n8n and Google Gemini.
-With this system, turning raw numbers into real insights becomes as simple as sending a message.
+The AI-Powered Data Analyst Workflow seamlessly merges automation, intelligence, and interaction.
+It turns analytics into a conversation, reports into automation, and insights into action — powered by n8n, Google Gemini, MySQL, and Telegram.
 ________________________________________
-🧩 Built With
-n8n • Google Gemini AI • MySQL • Telegram Bot API
+🔗 Project Links
+•	🎞️ Demo Video: https://github.com/Hasini78/data-analyst_workflow/blob/main/workflow_recording/data%20analyst_recording.mp4
+•	🧾 Documentation: https://github.com/Hasini78/data-analyst_workflow/blob/main/documentation/Data%20analyst%20documentation.pdf
+•	📊 Presentation (PPT): https://github.com/Hasini78/data-analyst_workflow/blob/main/data%20analyst_ppt/Data%20Analyst_ppt.pptx
 
