@@ -132,9 +132,7 @@ Insight: Kohli leads with both aggression and consistency, followed closely by R
 ![Output File](./Assets/output.png)  
 
 📲 **Telegram Notification:**  
-“✅ Your cricket analysis report is ready! Check the saved file in /home/node/files.”  
-
-![Telegram Notification](./Assets/telegram_output.png)  
+“✅ Your cricket analysis report is ready! Check the saved file in /home/node/files.”    
 
 ---
 
